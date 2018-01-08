@@ -3,15 +3,17 @@ import Header from "./Header";
 import Action from "./Action";
 import Options from "./Options";
 import AddOption from './AddOption';
+import OptionModal from "./OptionModal";
 
 class App extends Component {
   state = {
-    options: []
+    options: [],
+    selectedOption: undefined
   };
   handlePick = () => {
     const randomNum = Math.floor(Math.random() * this.state.options.length);
-    const option = this.state.options[randomNum];
-    alert(option);
+    const selectedOption = this.state.options[randomNum];
+    this.setState(() => ({ selectedOption }));
   }
   handleDeleteOptions = () => {
     this.setState(() => ({ options: [] }));
@@ -31,6 +33,9 @@ class App extends Component {
       options: prevState.options.concat(option)
     }));
   }
+  handleClearSelectedOption = () => {
+    this.setState(() => ({ selectedOption: undefined }));
+  };
   componentDidMount(prevProps, prevState) {
     try {
       const json = localStorage.getItem('options');
@@ -61,6 +66,8 @@ class App extends Component {
           handleDeleteOptions={this.handleDeleteOptions}
           handleDeleteOption={this.handleDeleteOption} />
         <AddOption handleAddOption={this.handleAddOption} />
+        <OptionModal selectedOption={this.state.selectedOption}
+                     handleClearSelectedOption={this.handleClearSelectedOption} />
       </div>
     );
   }
